@@ -33,6 +33,12 @@ class MovieTableViewCell: UITableViewCell {
         posterImageView.kf.setImage(with: movie.posterURL, placeholder: placeholder)
         titleLabel.text = movie.title
         yearLabel.text = movie.year
+        
+        if MovieController.shared.favoriteMovie(from: movie) != nil {
+            setFavorite()
+        } else {
+            setUnFavorite()
+        }
     }
     
     func update(with movie: Movie, onFavorite: (() -> Void)?) {

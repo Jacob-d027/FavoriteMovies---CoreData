@@ -40,6 +40,13 @@ class MovieSearchViewController: UIViewController {
         datasource?.apply(snapshot)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        var snapshot = datasource.snapshot()
+        guard !snapshot.sectionIdentifiers.isEmpty else { return }
+        snapshot.reloadSections([0])
+        datasource?.apply(snapshot, animatingDifferences: true)
+    }
 }
 
 private extension MovieSearchViewController {
@@ -72,18 +79,25 @@ private extension MovieSearchViewController {
         }
     }
     
-    func applyNewSnapshot(from movies: [APIMovie]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, APIMovie>()
+    func applyNewSnapshot(from movies: [APIMovie]) {        var snapshot = NSDiffableDataSourceSnapshot<Int, APIMovie>()
         snapshot.appendSections([0])
         snapshot.appendItems(movies)
-        datasource?.apply(snapshot, animatingDifferences: true)
+        print(datasource.snapshot())
+        datasource.apply(snapshot, animatingDifferences: true)
         tableView.backgroundView = movies.isEmpty ? backgroundView : nil
     }
 
     func toggleFavorite(_ movie: APIMovie) {
         print("SEE! I knew you liked \(movie.title)!")
         // TODO: Save movie to core data so it can become a favorite
-        movieController.favoriteMovie(movie)
+        if movieController.existingFavorite(for: movie) {
+            if let movieToRemove = movieController.favoriteMovie(from: movie) {
+                movieController.unfavoriteMovie(movieToRemove)
+            }
+        } else {
+            movieController.favoriteMovie(movie)
+        }
+        reload(movie)
     }
     
     func reload(_ movie: APIMovie) {

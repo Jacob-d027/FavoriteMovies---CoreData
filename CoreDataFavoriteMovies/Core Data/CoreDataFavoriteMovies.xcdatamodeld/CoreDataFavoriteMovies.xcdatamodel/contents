@@ -2,6 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23B92" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Movie" representedClassName="Movie" syncable="YES" codeGenerationType="class">
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="imdb" optional="YES" attributeType="String"/>
         <attribute name="imdbID" optional="YES" attributeType="String"/>
         <attribute name="posterURLString" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>

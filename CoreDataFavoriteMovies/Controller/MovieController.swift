@@ -17,9 +17,26 @@ class MovieController {
         return try await apiController.fetchMovies(with: searchTerm)
     }
     
+    func favoriteMovie(from movie: APIMovie) -> Movie? {
+        let fetchRequest = Movie.fetchRequest()
+        let predicate = NSPredicate(format: "imdb == %@", movie.id)
+        fetchRequest.predicate = predicate
+        
+        return try? viewContext.fetch(fetchRequest).first
+    }
+    
+    func existingFavorite(for movie: APIMovie) -> Bool {
+        let fetchRequest = Movie.fetchRequest()
+        let predicate = NSPredicate(format: "imdbID == %@", movie.id)
+        fetchRequest.predicate = predicate
+        
+        let count = try? viewContext.count(for: fetchRequest)
+        return (count ?? 0) > 0
+    }
+    
     func favoriteMovie(_ movie: APIMovie) {
         let newMovie = Movie(context: viewContext)
-        newMovie.imdbID = movie.imdbID
+        newMovie.imdbID = movie.id
         newMovie.posterURLString = movie.posterURL?.absoluteString
         newMovie.title = movie.title
         newMovie.year = movie.year
